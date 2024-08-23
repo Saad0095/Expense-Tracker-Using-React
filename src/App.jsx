@@ -9,6 +9,7 @@ function App() {
       ? JSON.parse(localStorage.getItem("expenses"))
       : []
   );
+
   const [name, setName] = useState("");
   const [amount, setAmount] = useState("");
 
@@ -22,21 +23,25 @@ function App() {
   // };
 
   const handleAddExpense = () => {
-    // setExpense([...expense, {name:data.name,amount:data.amount}])
     if (name.trim() && amount.trim()) {
+      // setExpense([...expense, {name:data.name,amount:data.amount}])
       setExpenses([...expenses, { id: expenses.length + 1, name, amount }]);
       setName("");
       setAmount("");
     }
   };
 
+  const handleDelete = (id) =>{
+     const newExpenses = expenses.filter(expense => expense.id !== id);
+     setExpenses(newExpenses)
+  }
+
   useEffect(() => {
     localStorage.setItem("expenses", JSON.stringify(expenses));
   }, [expenses]);
 
   return (
-    <div className="min-h-screen container mx-auto flex flex-col gap-20 justify-center items-center">
-      <ExpensesList expenses={expenses} />
+    <div className="min-h-screen container mx-auto flex flex-col gap-3 mt-20 items-center">
       <AddExpense
         name={name}
         amount={amount}
@@ -44,6 +49,8 @@ function App() {
         setAmount={setAmount}
         handleAddExpense={handleAddExpense}
       />
+      <ExpensesList expenses={expenses} handleDelete={handleDelete}/>
+
     </div>
   );
 }
